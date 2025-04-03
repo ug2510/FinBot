@@ -1,102 +1,59 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header :class="headerClass" elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn flat round dense icon="menu" @click="toggleSidebar" />
+        <q-toolbar-title>Finance AI Chatbot</q-toolbar-title>
+        <q-space />
+        <q-toggle v-model="darkMode" icon="brightness_4" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay bordered :class="drawerClass">
+      <sideBar :darkMode="darkMode" />
     </q-drawer>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container :class="pageClass">
+      <chat-interface :darkMode="darkMode" />
     </q-page-container>
   </q-layout>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+<script>
+import sideBar from '../components/sideBar.vue'
+import chatInterface from '../components/chatInterface.vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+export default {
+  components: {
+    sideBar,
+    chatInterface,
   },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+  data() {
+    return {
+      leftDrawerOpen: false,
+      darkMode: this.$q.dark.isActive,
+    }
   },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+  computed: {
+    headerClass() {
+      return this.darkMode ? 'bg-dark text-white' : 'bg-white text-dark'
+    },
+    drawerClass() {
+      return this.darkMode ? 'bg-grey-10 text-white' : 'bg-white text-black'
+    },
+    pageClass() {
+      return this.darkMode ? 'bg-black text-white' : 'bg-grey-1 text-black'
+    },
   },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+  watch: {
+    darkMode(newValue) {
+      this.$q.dark.set(newValue)
+    },
   },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+  methods: {
+    toggleSidebar() {
+      this.leftDrawerOpen = !this.leftDrawerOpen
+    },
   },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
-const leftDrawerOpen = ref(false)
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 </script>
