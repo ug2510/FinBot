@@ -57,3 +57,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.q-header {
+  z-index: 10000 !important; 
+  position: relative; 
+}
+</style>

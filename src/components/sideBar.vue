@@ -1,5 +1,5 @@
 <template>
-  <q-drawer side="left" overlay bordered v-model="drawer" :class="drawerClass">
+  <q-drawer side="left" overlay bordered v-model="drawer" :class="drawerClass" elevated >
     <q-list bordered separator>
       <q-item clickable v-ripple to="/">
         <q-item-section avatar>
